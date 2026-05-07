@@ -6,6 +6,7 @@ venv/
 # C extensions
 *.so
 
+artifacts/
 # Distribution / packaging
 .Python
 build/
