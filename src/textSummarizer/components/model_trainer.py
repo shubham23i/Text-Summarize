@@ -4,6 +4,7 @@ from transformers import AutoModelForSeq2SeqLM, AutoTokenizer
 from transformers import DataCollatorForSeq2Seq
 from transformers import Seq2SeqTrainingArguments, Seq2SeqTrainer
 from datasets import load_from_disk
+from textSummarizer.entity import ModelTrainerConfig
 
 
 class ModelTrainer:
@@ -60,26 +61,26 @@ class ModelTrainer:
 
             eval_strategy=self.config.evaluation_strategy,
 
-            
-
             save_steps=self.config.save_steps,
 
             gradient_accumulation_steps=self.config.gradient_accumulation_steps,
 
             fp16=False,
 
-            dataloader_num_workers=2
-        )
+            dataloader_num_workers=0,
 
-        # Trainer
+            report_to=[],
+
+            logging_dir=None
+        )
         trainer = Seq2SeqTrainer(
             model=model,
             args=trainer_args,
             data_collator=seq2seq_data_collator,
             train_dataset=dataset_samsum_pt["train"],
-            eval_dataset=dataset_samsum_pt["validation"]
+            eval_dataset=dataset_samsum_pt["validation"],
+            tokenizer=tokenizer
         )
-
         # Start training
         trainer.train()
 
